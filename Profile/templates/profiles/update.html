@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    
+    {% if confirm %}
+    <div class="ui blue message">updated</div>
+        
+    {% endif %}
+        
+    <form action="" method="post" class="ui form" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{form}}
+        <button type="submit" class="ui positive button">update</button>
+    </form>
+{% endblock content %}  

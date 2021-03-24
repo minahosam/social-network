@@ -1,0 +1,1 @@
+deafult_apps_config='Profile.apps.ProfileConfig'

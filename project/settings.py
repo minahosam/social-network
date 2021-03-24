@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'Profile',
+    'posts',
 ]
 
 MIDDLEWARE = [
@@ -54,7 +56,7 @@ ROOT_URLCONF = 'project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -119,10 +121,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    BASE_DIR / "static",                                     
+    BASE_DIR / "static",
+    '/var/www/static/',
 ]
 STATIC_ROOT = "/var/www/example.com/static/"
 MEDIA_URL='/media/'
-MEDIA_DIRS=[
-    BASE_DIR / "media"
-]
+MEDIA_DIRS=[BASE_DIR / "media"]

@@ -1,0 +1,19 @@
+body {
+    background:#F8F8F8;
+}
+.nav {
+    border-radius: 0px;
+    padding: 10px 0 10px 0 ;
+    background-color : black !important;
+}
+.mb-7 {
+    margin-top: 7px ;
+}
+.mymodal{
+    height: 20px;
+    top : 20px;
+    font-size : medium;
+}
+.mb-5{
+    margin-bottom: 10px;
+}
