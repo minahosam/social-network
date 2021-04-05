@@ -1,6 +1,7 @@
 from django.shortcuts import render
-from .models import profile
+from .models import profile , relation
 from .forms import profile_form
+from django.shortcuts import get_object_or_404
 # Create your views here.
 def show_my_profile(request):
     my_profile= profile.objects.get(user=request.user)
@@ -17,3 +18,10 @@ def update_profile(request):
     else:
         form=profile_form()
     return render(request,'profiles/update.html',{'form':form , 'confirm':confirm})
+def invitations_receive(request):
+    # profile_me= profile.objects.get(user=request.user)
+    # print(profile_me)
+    invite=relation.objects.receive_invitations(request.user)
+    print(invite)
+    con={'invite':invite}
+    return render(request,'profiles/invitations.html',{'invite':invite})

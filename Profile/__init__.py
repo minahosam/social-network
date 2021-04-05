@@ -1,1 +1,1 @@
-deafult_apps_config='Profile.apps.ProfileConfig'
+default_app_config='Profile.apps.ProfileConfig'

@@ -5,13 +5,13 @@ from .models import profile , relation
 @receiver(post_save,sender=User)
 def create_profile(sender , instance ,created , **kwargs):
     if created:
-        profile.objects.create(User=instance)
+        profile.objects.create(user=instance)
 @receiver(post_save,sender=relation)
 def add_friends(sender,instance,created,**kwargs):
-    sender1=instance.sender
-    receiver1=instance.receiver
+    sender=instance.sender
+    receiver=instance.receiver
     if instance.status=='accepted':
-        sender1.friends.add(sender1.user)
-        receiver1.friends.add(receiver1.user)
-        sender1.save()
-        receiver1.save()
+        sender.friends.add(sender.user)
+        receiver.friends.add(receiver.user)
+        sender.save()
+        receiver.save()

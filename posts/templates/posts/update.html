@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}
+  update post
+{% endblock title %}
+{% block content %}
+    
+    {% if not messages %}
+        
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{form}}
+        <button type="submit">submit</button>
+    </form>
+  {% endif %}
+  {% if messages %}
+        {% for message in messages %}
+            
+            {% if 'warning' in message.tags %}
+                {{message}}
+                
+            {% endif %}
+                
+          
+        {% endfor %}
+    {% endif %}
+{% endblock content %}

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}
+  delete post
+{% endblock title %}
+{% block content %}
+    {% if not messages %}
+    <h3>delete post</h3>
+    <form action="" method="POST">
+        {% csrf_token %}
+        <p>do you want to delete this {{post.content}}</p>
+        <button type="submit" >delete</button>
+    </form>
+      
+    {% endif %}
+    
+    {% if messages %}
+        {% for message in messages %}
+            
+            {% if 'warning' in message.tags %}
+                {{message}}
+                
+            {% endif %}
+                
+          
+        {% endfor %}
+    {% endif %}
+        
+{% endblock content %}

@@ -10,31 +10,56 @@ class profile(models.Model):
     email=models.EmailField(max_length=254,blank=True, null=True)
     country=models.CharField(max_length=50,blank=True, null=True)
     image=models.ImageField(upload_to='images/',default='avatar.jpg')
-    friends=models.ManyToManyField(User,related_name='friends',blank=True,null=True)
+    friends=models.ManyToManyField(User,related_name='friends')
     slug = models.SlugField(max_length = 50 , unique=True,blank=True, null=True)
     updated=models.DateTimeField(auto_now=True)
     created=models.DateField(auto_now=True)
     def my_friends(self):
         return self.friends.all()
+    def num_posts(self):
+        return self.post_author.all().count()
+    def all_author_posts(self):
+        return self.post_author.all()
+    def all_likes_given(self):
+        like_num = self.liked_author.all()
+        all_likes=0
+        for item in like_num:
+            if item.value == 'like':
+                all_likes += 1
+        return all_likes
+    def all_likes_received(self):
+       all_my_posts= self.post_author.all()
+       all_likes=0
+       for like in all_my_posts:
+           all_likes += like.like_post.all().count()
+       return all_likes 
     def my_friends_no(self):
         return self.friends.all().count()
     def __str__(self):
         return str(self.user)
     def save(self, *args, **kwargs):
         if not self.slug:
+            if self.first_name and self.last_name:
                self.slug=slugify(self.first_name +' '+self.last_name)
+            else:
+                self.slug=slugify(self.user)
         super(profile, self).save(*args, **kwargs) # Call the real save() method
 status_choices=[
     ('sent','sent'),
     ('accepted','accepted'),
     ('rejected','rejected')
 ]
+class relationmanager(models.Manager):
+    def receive_invitations(self,receiver_):
+        received=relation.objects.filter(receiver=receiver_,status='sent')
+        return received
 class relation(models.Model):
     sender = models.ForeignKey(User,related_name='sender', on_delete=models.CASCADE)
     receiver=models.ForeignKey(User,related_name='receiver', on_delete=models.CASCADE)
     status=models.CharField(max_length=10,choices=status_choices)
     updated=models.DateTimeField(auto_now=True)
     created=models.DateTimeField(auto_now_add=True)
+    objects=relationmanager()
     def __str__(self):
         return f'{self.sender}--------{self.receiver}'
     

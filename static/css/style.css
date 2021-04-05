@@ -4,16 +4,25 @@ body {
 .nav {
     border-radius: 0px;
     padding: 10px 0 10px 0 ;
-    background-color : black !important;
+    background-color :yellowgreen;
+    font-size: large;
 }
-.mb-7 {
+.mb-7 
+{
     margin-top: 7px ;
 }
-.mymodal{
+.mymodal
+{
     height: 20px;
     top : 20px;
     font-size : medium;
 }
 .mb-5{
     margin-bottom: 10px;
+}
+.photo {
+    height: 400px;
+}
+.bwhite-lg {
+    background-color:red;
 }

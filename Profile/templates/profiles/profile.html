@@ -2,73 +2,98 @@
 {% load static %}
 {% block content %}
 <div class="ui modal mymodal">
-    <i class="close icon"></i>
-    <div class="header">
-      Profile Picture
+  <i class="close icon"></i>
+  <div class="header">
+    Profile Picture
+  </div>
+  <div class="image content">
+    <div class="ui medium image">
+      <img src="{{profile.image.url}}">
     </div>
-    <div class="image content">
-      <div class="ui medium image">
-    <img src="{{profile.image.url}}">
-      </div>
-      <div class="description">
-        <div class="ui header">We've auto-chosen a profile image for you.</div>
-        <p>We've grabbed the following image from the <a href="https://www.gravatar.com" target="_blank">gravatar</a> image associated with your registered e-mail address.</p>
-        <p>Is it okay to use this photo?</p>
-      </div>
+    <div class="description">
+      <div class="ui header">We've auto-chosen a profile image for you.</div>
+      <p>We've grabbed the following image from the <a href="https://www.gravatar.com" target="_blank">gravatar</a>
+        image associated with your registered e-mail address.</p>
+      <p>Is it okay to use this photo?</p>
     </div>
-    <div class="actions">
-      <div class="ui black deny button">
-        Nope
+  </div>
+  <div class="actions">
+    <div class="ui black deny button">
+      Nope
+    </div>
+    <div class="ui positive right labeled icon button">
+      Yep, that's me
+      <i class="checkmark icon"></i>
+    </div>
+  </div>
+</div>
+<div class="ui segment">{{profile.user}}
+  <div class="ui grid">
+    <div class="row">
+      <div class="six wide column ">
+        <img src="{{profile.image.url}}" class="ui medium rounded image photo" alt="">
+        <br>
+        <div class="row mb-5">
+          <button type="submit" class="ui positive button"><a href="{% url 'profile:update' %}">update</a></button>
+        </div>
       </div>
-      <div class="ui positive right labeled icon button">
-        Yep, that's me
-        <i class="checkmark icon"></i>
+      <div class="ten wide column">
+        <table class="ui table">
+          <tbody>
+            <tr>
+              <td>username</td>
+              <td>{{profile.user}}</td>
+            </tr>
+            <tr>
+              <td>firstname</td>
+              <td>{{profile.first_name}}</td>
+            </tr>
+            <tr>
+              <td>lastname</td>
+              <td>{{profile.last_name}}</td>
+            </tr>
+            <tr>
+              <td>bio</td>
+              <td>{{profile.bio}}</td>
+            </tr>
+            <tr>
+              <td>my_friends</td>
+              {% for friend in profile.my_friends %}
+                <td>{{friend}}</td>
+              {% endfor %}
+            </tr>
+            <tr>
+              <td>my_friends_no</td>
+              <td>{{profile.my_friends_no}}</td>
+            </tr>
+            <tr>
+              <td>posts_number</td>
+              <td>{{profile.num_posts}}</td>
+            </tr>
+            <tr>
+              <td>all my posts</td>
+              {% if all_author_posts %}
+                {% for post in all_author_posts %}
+                  <td>{{post}}</td>
+                {% endfor %}
+              {% else %} 
+                <td><h2>add new post</h2></td>
+              {% endif %}
+            </tr>
+            <tr>
+              <td>all likes given</td>
+              <td>{{profile.all_likes_given}}</td>
+            </tr>
+            <tr>
+              <td>all liked posts</td>
+              <td>{{profile.all_likes_received}}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
-  <div class="ui segment">{{profile.user}}
-      <div class="ui grid">
-          <div class="row">
-            <div class="six wide column">
-                <img src="{{profile.image.url}}" class="ui medium rounded image" alt="">
-                <br>
-                    <div class="row mb-5">
-                        <button type="submit" class="ui positive button"><a href="{% url 'profile:update' %}">update</a></button>
-                    </div>
-            </div>
-            <div class="ten wide column">
-                <table class="ui table">
-                    <tbody>
-                        <tr>
-                            <td>username</td>
-                            <td>{{profile.user}}</td>
-                        </tr>
-                        <tr>
-                            <td>firstname</td>
-                            <td>{{profile.first_name}}</td>
-                        </tr>
-                        <tr>
-                            <td>lastname</td>
-                            <td>{{profile.last_name}}</td>
-                        </tr>
-                        <tr>
-                            <td>bio</td>
-                            <td>{{profile.bio}}</td>
-                        </tr>
-                        <tr>
-                            <td>my_friends</td>
-                            <td>{{profile.my_friends}}</td>
-                        </tr>
-                        <tr>
-                            <td>my_friends_no</td>
-                            <td>{{profile.my_friends_no}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-          </div>
-      </div>
-  </div>
+</div>
 <br>
 <button class="ui secodry button" id="modal-btn"> show </button>
 {% endblock content %}

@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block title %}
+  posts
+{% endblock title %}
+{% block content %}
+  <div class="ui grid">
+      <div class="row">
+          <div class="eleven wide column">
+              {% for post in posts %}
+                  <div class="ui fluid card">
+                      <div class="ui fluid image">
+                        <img class="ui avatar image" src={{post.author.image.url}}> {{ post.author }} - {{ post.created|timesince}} ago
+                      </div>  
+                    <div class="ui fluid image">
+                        {% if post.image %}
+                            <img src={{post.image.url}}>
+                        {% endif %}
+                    </div>                     
+                      <div class="content">
+                          {{post.content}}
+                      </div>
+                        <div class="content">
+                            <form action="{% url 'posts:like' %}" method="POST">
+                                {% csrf_token %} 
+                                <input type="hidden" name="query" value="{{post.id}}">
+                                <button type="submit" class="ui button bwhite-lg">
+                                    {% if user in post.like_post.all %}
+                                        unlike
+                                    {% else %}
+                                        like
+                                    {% endif %}        
+                                </button>
+                            </form>
+                            {% if request.user == post.author.user  %} 
+                            <a href="{% url 'posts:update' post.pk %}"><button class="ui button bwhite-lg ">Update</button></a>
+                            <a href="{% url 'posts:delete' post.pk %}"><button class="ui button bwhite-lg ">Delete</button></a>    
+
+                            {% endif %}
+                            <div class="right floated">
+                                <span>{{post.like_post.count|cut:"like"}}like</span>
+                                <span>{{post.commented_post.count}}comment</span>
+                            </div>
+
+                            <div class="extra content">
+                                <div class="mb-5">
+
+                                </div>
+                                <button class="ui button bwhite-lg cmd-button">show/hide messages</button>
+                                <div class="comment-box">
+                                    {% for com in post.commented_post.all %}
+                                        <div class="ui segment mb-5">
+                                            <img class="ui avatar image" src="{{com.author.image.url}}">
+                                            <span>{{com.author.user}}</span>
+                                            <div class="mt-5">{{com.comment_content}}</div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            <div class="ui comment">
+                                
+                            </div>
+                            <form action="" method="POST" class="ui form" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                {{form_c}}
+                                <input type="hidden" name='q' value={{post.id}}>
+                                <button class="ui button bwhite-lg" type="submit" name='submit_c_form'>comment</button>
+                            </form>
+                        </div>
+                    </div>
+                  </div>
+              {% endfor %}         
+          </div>
+          <div class="five wide column">
+            <div class="ui form">
+                <form action="" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{form_p}}
+                    <button class="ui button bwhite-lg" type="submit">post</button>
+                </form>
+            </div>
+          </div>
+      </div>
+  </div>
+{% endblock content %}
+{% block scripts %}
+  <script>
+      $(document).ready(function(){
+          let display = false
+          $(".cmd-button").click(function(){
+              if (display===false) {
+                  $(this).next(".comment-box").show('slow');
+                  display = true
+              } else{
+                  $(this).next('.comment-box').hide('slow');
+                  display = false
+              }
+          });
+      });
+  </script>
+{% endblock scripts %}

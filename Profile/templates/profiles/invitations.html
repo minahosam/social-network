@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}
+  invitations
+{% endblock title %}
+
+{% block content %}
+    <h3>invitations</h3>
+    <ul>
+        {% for item in invite %}
+            <li>{{item}}</li>          
+        {% endfor %}
+    </ul>
+{% endblock content %}
+    
