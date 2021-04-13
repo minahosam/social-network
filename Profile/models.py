@@ -1,11 +1,38 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.text import slugify
+from django.db.models import Q
 # Create your models here.
+class  profile_manager(models.Manager):
+    def all_profiles_exclude_me(self,me):
+        all_profile=profile.objects.all().exclude(user=me)
+        return all_profile
+    def invited_people_aviable(self,me):
+        all_profiles=profile.objects.all().exclude(user=me)
+        print(all_profiles)
+        print('----------------------')
+        my_profile=profile.objects.get(user = me)
+        print(my_profile)
+        print('----------------------')
+        qs=relation.objects.filter(Q(sender=me),Q(receiver=me))
+        print(qs)
+        print('--------------------')
+        approved=[]
+        for rel in qs:
+            if rel.status=='accepted':
+                approved.append(rel.sender)
+                approved.append(rel.receiver)
+        print(approved)
+        print('-------------------------')
+        aviable_users=[]
+        aviable_users=[aviable for aviable in all_profiles if aviable not in approved]
+        print(aviable_users)
+        print('--------------------')
+        return aviable_users
 class profile(models.Model):
     first_name = models.CharField(max_length=50,blank=True, null=True)
     last_name=models.CharField(max_length=50,blank=True, null=True)
-    user=models.OneToOneField(User,on_delete=models.CASCADE)
+    user=models.OneToOneField(User,on_delete=models.CASCADE,related_name='user')
     bio=models.CharField(max_length=300,default='no bio........')
     email=models.EmailField(max_length=254,blank=True, null=True)
     country=models.CharField(max_length=50,blank=True, null=True)
@@ -14,6 +41,7 @@ class profile(models.Model):
     slug = models.SlugField(max_length = 50 , unique=True,blank=True, null=True)
     updated=models.DateTimeField(auto_now=True)
     created=models.DateField(auto_now=True)
+    objects=profile_manager()
     def my_friends(self):
         return self.friends.all()
     def num_posts(self):
@@ -49,10 +77,14 @@ status_choices=[
     ('accepted','accepted'),
     ('rejected','rejected')
 ]
+# show only received invitation to user
 class relationmanager(models.Manager):
     def receive_invitations(self,receiver_):
         received=relation.objects.filter(receiver=receiver_,status='sent')
         return received
+    # def send_invitations(self,sender_):
+    #     sent=relation.objects.filter(sender=sender_,status='sent')
+    #     return sent
 class relation(models.Model):
     sender = models.ForeignKey(User,related_name='sender', on_delete=models.CASCADE)
     receiver=models.ForeignKey(User,related_name='receiver', on_delete=models.CASCADE)

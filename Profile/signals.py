@@ -1,4 +1,4 @@
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save,pre_delete
 from django.contrib.auth.models import User
 from django.dispatch import receiver
 from .models import profile , relation
@@ -8,10 +8,19 @@ def create_profile(sender , instance ,created , **kwargs):
         profile.objects.create(user=instance)
 @receiver(post_save,sender=relation)
 def add_friends(sender,instance,created,**kwargs):
-    sender=instance.sender
-    receiver=instance.receiver
+    sender_=instance.sender
+    receiver_=instance.receiver
+    # user=instance.user
     if instance.status=='accepted':
-        sender.friends.add(sender.user)
-        receiver.friends.add(receiver.user)
-        sender.save()
-        receiver.save()
+        receiver_.friends.add(sender_.user)
+        sender_.friends.add(receiver_.user)
+        sender_.save()
+        receiver_.save()
+@receiver(pre_delete,sender=relation)
+def remove_friends(sender,instance,**kwargs):
+    sender_=instance.sender
+    receiver_=instance.receiver
+    sender_.friends.remove(receiver_.user)
+    receiver_.friends.remove(sender_.user)
+    sender_.save()
+    receiver_.save()

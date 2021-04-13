@@ -5,10 +5,17 @@
 
 {% block content %}
     <h3>invitations</h3>
-    <ul>
-        {% for item in invite %}
-            <li>{{item}}</li>          
-        {% endfor %}
-    </ul>
+    
+    {% if is_empty %}
+        <h3>NO INVITATIONS YET.................</h3>
+    {% endif %}
+    {% for obj in invite %}
+      
+      {% for pr in profile.objects.all %}
+        {{pr.obj.slug}}
+      {% endfor %}
+        
+    {% endfor %}
+        
 {% endblock content %}
     
