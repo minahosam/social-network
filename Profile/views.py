@@ -35,9 +35,23 @@ def invitations_receive(request):
         is_empty=True
     return render(request,'profiles/invitations.html',{'invite':results , 'is_empty':is_empty,'profile':p})
 def accept_invite(request):
-    pass
+    pk=request.GET.get('profile_no')
+    profile_sender=profile.objects.get(pk=pk)
+    profile_receiver=profile.objects.get(user=request.user)
+    rel=relation.objects.get(sender=profile_sender.user,receiver=profile_receiver.user,status='sent')
+    if rel.status=='sent':
+        rel.status='accepted'
+        rel.save()
+    return redirect('profile:invite')
 def reject_invite(request):
-    pass
+    pk=request.GET.get('profile_no')
+    profile_sender=profile.objects.get(pk=pk)
+    profile_receiver=profile.objects.get(user=request.user)
+    rel=relation.objects.get(sender=profile_sender.user,receiver=profile_receiver.user,status='sent')
+    if rel.status=='sent':
+        rel.status='rejected'
+        rel.save()
+    return redirect('profile:invite')
 def invitation_sent(request):
     invite_sent=relation.objects.send_invitations(request.user)
     con={'sent':invite_sent}

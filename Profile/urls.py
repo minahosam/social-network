@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import send_invitation, show_my_profile,update_profile , invitations_receive,invitation_sent,all_aviable_profiles,aviable_invited_people,all_profiles,send_invitation,remove_user
+from .views import send_invitation, show_my_profile,update_profile , invitations_receive,invitation_sent,all_aviable_profiles,aviable_invited_people,all_profiles,send_invitation,remove_user,accept_invite,reject_invite
 app_name='profile'
 urlpatterns = [
     path('',show_my_profile,name='my_profile'),
@@ -11,4 +11,6 @@ urlpatterns = [
     path('all/',all_profiles.as_view(),name='all'),
     path('sent-invitation/',send_invitation,name='sent'),
     path('remove-user/',remove_user,name='remove'),
+    path('accept/',accept_invite,name='accept'),
+    path('reject/',reject_invite,name='reject'),
 ]

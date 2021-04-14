@@ -10,11 +10,28 @@
         <h3>NO INVITATIONS YET.................</h3>
     {% endif %}
     {% for obj in invite %}
-      
-      {% for pr in profile.objects.all %}
-        {{pr.obj.slug}}
-      {% endfor %}
-        
+     <div class="ui segment">
+       <div class="ui grid">
+         <div class="three wide column">
+           <img class="ui small circular image" src="{{obj.user.image.url}}" alt="">
+         </div>
+         <div class="thirteen wide column">
+           <h3>{{obj.user}}</h3>
+           <p>{{obj.user.bio}}</p>
+           <a href="">
+             <button class="ui primary button w-big mb-5">see profile</button>
+           </a>
+           <form action="{% url 'profile:accept' %}" method="GET">
+             <input type="hidden" name="profile_no" value="{{obj.pk}}">
+             <button class="ui positive basic button w-big mb-5"><i class="check icon"></i>ACCEPT INVITATIN</button>
+           </form>
+           <form action="{% url 'profile:reject' %}" method="GET">
+             <input type="hidden" name="profile_no" value="{{obj.pk}}">
+             <button class="ui negative basic button w-big mb-5"><i class="close icon"></i>REJECT INVITATION</button>
+           </form>
+         </div>
+       </div>
+     </div>        
     {% endfor %}
         
 {% endblock content %}

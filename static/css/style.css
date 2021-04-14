@@ -20,6 +20,9 @@ body {
 .mb-5{
     margin-bottom: 10px;
 }
+.w-big{
+    width: 200px;
+}
 .photo {
     height: 400px;
 }
