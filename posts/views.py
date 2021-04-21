@@ -5,6 +5,9 @@ from .models import post , like
 from Profile.models import profile
 from .forms import  PostForm,CommentForm
 from django.views.generic import UpdateView,DeleteView
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+from  django.contrib.auth.mixins import LoginRequiredMixin
 # Create your views here.
 def all_posts(request):
     posts=post.objects.all()
@@ -32,6 +35,7 @@ def all_posts(request):
     else:
         form_c=CommentForm()
     return render(request,'posts/all_post.html',{'posts':posts , 'user':user ,'form_p':form_p , 'form_c':form_c})
+@login_required
 def like_or_unlike(request):
     user=request.user
     print(user)
@@ -58,8 +62,13 @@ def like_or_unlike(request):
                 likee.value='like'
             likee.save()
             post_query.save()
+        data={
+            'value':likee.value,
+            'likes':post_query.like_post.all().count()
+        }
+        return JsonResponse(data,safe=False)
     return redirect('posts:all')
-class postdelete(DeleteView):
+class postdelete(LoginRequiredMixin,DeleteView):
     model = post
     template_name ='posts/delete_post.html'
     # success_url ='/posts/'
@@ -70,7 +79,7 @@ class postdelete(DeleteView):
         if not self.request.user == delete_post.author.user:
             messages.warning(self.request,'you cannot delete this post')
         return delete_post
-class postupdate(UpdateView):
+class postupdate(LoginRequiredMixin,UpdateView):
     model = post
     form_class=PostForm
     template_name='posts/update.html'

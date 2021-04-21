@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.text import slugify
 from django.db.models import Q
+from django.shortcuts import reverse
 # Create your models here.
 class  profile_manager(models.Manager):
     def all_profiles_exclude_me(self,me):
@@ -42,6 +43,8 @@ class profile(models.Model):
     updated=models.DateTimeField(auto_now=True)
     created=models.DateField(auto_now=True)
     objects=profile_manager()
+    def get_absolute_url(self):
+        return reverse('profile:detail', kwargs={'slug': self.slug})
     def my_friends(self):
         return self.friends.all()
     def num_posts(self):
@@ -82,9 +85,9 @@ class relationmanager(models.Manager):
     def receive_invitations(self,receiver_):
         received=relation.objects.filter(receiver=receiver_,status='sent')
         return received
-    # def send_invitations(self,sender_):
-    #     sent=relation.objects.filter(sender=sender_,status='sent')
-    #     return sent
+    def send_invitations(self,sender_):
+        sent=relation.objects.filter(sender=sender_,status='sent')
+        return sent
 class relation(models.Model):
     sender = models.ForeignKey(User,related_name='sender', on_delete=models.CASCADE)
     receiver=models.ForeignKey(User,related_name='receiver', on_delete=models.CASCADE)

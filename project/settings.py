@@ -64,6 +64,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'Profile.context_processors.user_pic',
+                'Profile.context_processors.invitation_receive_no',
             ],
         },
     },

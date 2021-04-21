@@ -17,7 +17,7 @@
             <div class="thirteen wide column">
               <h3>{{item.user}}</h3>
               <p>{{item.bio}}</p>
-              <button class="ui primary button"> see profile </button>
+              <a href="{{item.get_absolute_url}}"><button class="ui primary button"> see profile </button></a>
             </div>
             <form action="{% url 'profile:sent' %}" method="GET">
               <input type="hidden" name="profile_pk" value="{{item.pk}}">
