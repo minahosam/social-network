@@ -38,7 +38,7 @@ class profile(models.Model):
     email=models.EmailField(max_length=254,blank=True, null=True)
     country=models.CharField(max_length=50,blank=True, null=True)
     image=models.ImageField(upload_to='images/',default='avatar.jpg')
-    friends=models.ManyToManyField(User,related_name='friends')
+    friends=models.ManyToManyField(User,related_name='friends',blank=True,null=True)
     slug = models.SlugField(max_length = 50 , unique=True,blank=True, null=True)
     updated=models.DateTimeField(auto_now=True)
     created=models.DateField(auto_now=True)

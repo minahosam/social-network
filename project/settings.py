@@ -37,10 +37,39 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'Profile',
+    'home',
     'posts',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
 ]
+SITE_ID = 1
+LOGIN_REDIRECT_URL='/post'
+# if i want to login with email not username
+# ACCOUNT_AUTHENTICATION_METHOD='email'
+# ACCOUNT_EMAIL_REQUIRED=True
+# ACCOUNT_EMAIL_UNIQUE=True
 
+if DEBUG:
+    EMAIL_BACKEND='django.core.mail.backends.dummy.EmailBackend'
+# if i have really mail server
+# EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
+# ACCOUNT_EMAIL_VERIFICATION='mandatory'
+# Provider specific settings
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        # For each OAuth based provider, either add a ``SocialApp``
+        # (``socialaccount`` app) containing the required client
+        # credentials, or list them here:
+        'APP': {
+            'client_id': '123',
+            'secret': '456',
+            'key': ''
+        }
+    }
+}
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -66,9 +95,17 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'Profile.context_processors.user_pic',
                 'Profile.context_processors.invitation_receive_no',
+                'django.template.context_processors.request',
             ],
         },
     },
+]
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
 WSGI_APPLICATION = 'project.wsgi.application'

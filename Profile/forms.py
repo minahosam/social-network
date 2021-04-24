@@ -4,4 +4,4 @@ class profile_form(forms.ModelForm):
     class Meta:
         model = profile
         #fields = '__all__'
-        exclude=['user','friends','slug']
+        exclude=['user','friends']

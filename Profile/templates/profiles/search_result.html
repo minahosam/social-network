@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}
+  sent
+{% endblock title %}
+{% block content %}
+    
+    {% if is_empty %}
+        <h3>no profile yet</h3>
+    {% endif %}
+    {% for item in qs %}
+      <div class="ui segment">
+        <div class="ui grid">
+          <div class="row">
+            <div class="three wide column">
+              <img class="small circular image" src="{{item.image.url}}" alt="">
+            </div>
+            <div class="thirteen wide column">
+              <h3>{{item.user}}</h3>
+              <p>{{item.bio}}</p>
+              <a href="{{item.get_absolute_url}}"><button class="ui primary button"> see profile </button></a>
+            </div>
+            <form action="{% url 'profile:sent' %}" method="GET">
+              <input type="hidden" name="profile_pk" value="{{item.pk}}">
+              
+              {% if item.user not in rel_receiver and item.user not in rel_sender %}
+                <button class="ui positive basic button" type="submit"><i class="plus square icon"></i>add friend</button>
+              {% endif %}
+                
+            </form>
+            
+            {% if item.user in rel_receiver and item.user not in rel_sender  and request.user not in item.friends.all%}
+              <button class="ui disable button" type="submit"><i class="user icon"></i>waiting for response</button>
+            {% endif %}
+            {% if item.user not in rel_receiver and item.user in rel_sender  and request.user not in item.friends.all%}
+              <button class="ui disable button" type="submit"><i class="user icon"></i>need to approval</button>
+            {% endif %}
+              
+            <form action="{% url 'profile:remove' %}" method="GET">
+              <input type="hidden" name="profile_pk" value="{{item.pk}}">
+              
+              {% if request.user in item.friends.all %}
+                <button class="ui negative basic button" type="submit"><i class="minus square icon"></i>REMOVE</button>
+              {% endif %}
+                
+            </form>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+        
+{% endblock content %}

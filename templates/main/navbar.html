@@ -1,6 +1,6 @@
 <div class="ui inverted menu nav mb-7">
     <div class="ui container">
-      <a href="" class="item">
+      <a href="/" class="item">
           <h3>bffbook</h3>
       </a>
       {% if request.user.is_authenticated %}
@@ -28,9 +28,9 @@
                </div>
           </div>
                <div class="item">
-                <form action="" method="GET">
+                <form action="{% url 'profile:search' %}" method="GET">
                   <div class="ui action left icon input">
-                  <input class="prompt" type="text" name='q' placeholder="name of a friend...">
+                  <input class="prompt" type="text" name='q' required placeholder="name of a friend...">
                   <i class="search icon"></i>
                   <button type='submit' class="ui button">Search</button>
                   </div>
@@ -42,13 +42,16 @@
                    {{ request.user }}
               </a>
   
-              <a href="" class="ui item">
+              <a href="{% url 'account_logout' %}" class="ui item">
                   Logout
               </a>
           {% else %}
-          <a href="" class="ui item">
+          <a href="{% url 'account_login' %}" class="ui item">
                   Login
               </a>
+            <a href="{% url 'account_signup' %}" class="ui item">
+                Sign up
+            </a>
           {% endif %}
       </div>
     </div>

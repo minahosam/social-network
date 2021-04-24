@@ -33,9 +33,9 @@
       <div class="six wide column ">
         <img src="{{profile.image.url}}" class="ui medium rounded image photo" alt="">
         <br>
-        <div class="row mb-5">
+        <!-- <div class="row mb-5">
           <button type="submit" class="ui positive button"><a href="{% url 'profile:update' %}">update</a></button>
-        </div>
+        </div> -->
       </div>
       <div class="ten wide column">
         <table class="ui table">
@@ -95,5 +95,6 @@
   </div>
 </div>
 <br>
-<button class="ui secodry button" id="modal-btn"> show </button>
+<!-- <button class="ui secodry button" id="modal-btn"> show </button> -->
+<button type="submit" class="ui positive button"><a href="{% url 'profile:update' %}">update</a></button>
 {% endblock content %}

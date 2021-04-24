@@ -10,20 +10,21 @@ from  django.contrib.auth.mixins import LoginRequiredMixin
 # Create your views here.
 @login_required
 def show_my_profile(request):
+    global my_profile
     my_profile= profile.objects.get(user=request.user)
     return render(request,'profiles/profile.html',{'profile':my_profile})
 @login_required
 def update_profile(request):
     confirm=False
     if request.method=='POST':
-        form = profile_form(request.POST,request.FILES)
+        form = profile_form(request.POST,request.FILES,instance=my_profile)
         if form.is_valid():
             form1=form.save(commit=False)
             form1.user=request.user
-            form1
+            form1.save()
             confirm=True
     else:
-        form=profile_form()
+        form=profile_form(instance=my_profile)
     return render(request,'profiles/update.html',{'form':form , 'confirm':confirm})
 @login_required
 def invitations_receive(request):
@@ -148,3 +149,8 @@ def remove_user(request):
         rel=relation.objects.get(Q(sender=user)&Q(receiver=delete_user)| Q(receiver=user)&Q(sender=delete_user))
         rel.delete()
     return redirect('profile:all')
+def search_result(request):
+    search=request.GET.get('q')
+    print(search)
+    search_result=profile.objects.filter(Q(user__username__icontains=search)|Q(first_name__icontains=search))
+    return render(request,'profiles/search_result.html',{'qs':search_result})
